@@ -25,7 +25,10 @@ public class AssistantResource {
 	
 	@GetMapping("/assistants/{id}")
 	public Assistant retrieveAssistant(@PathVariable Long id){
-		Optional<Assistant> assistant = assistantRepository.findById(id);		
+		Optional<Assistant> assistant = assistantRepository.findById(id);
+			if(!assistant.isPresent()) {
+				return null;
+			}
 		return assistant.get();
 	}
 	
@@ -36,7 +39,13 @@ public class AssistantResource {
 	
 	@PostMapping("/assistants")
 	public Assistant createAssistant(@RequestBody Assistant assistant){
-		Assistant savedAssistant = assistantRepository.save(assistant);
+		Assistant savedAssistant;
+		try {
+		savedAssistant = assistantRepository.save(assistant);
+		}
+		catch(Exception e) {
+			return null;
+		}
 		return savedAssistant;
 	}
 	
